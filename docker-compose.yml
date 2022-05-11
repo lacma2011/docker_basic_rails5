@@ -1,0 +1,30 @@
+version: '3'
+services:
+      
+  rails:
+    build:
+      context: .
+      dockerfile: Dockerfile_rails
+    image: myrails5project
+    container_name: rails5
+    #depends_on:
+    #  - frontend
+    networks:
+      mynetwork:
+        ipv4_address: 192.168.4.100
+    stdin_open: true
+    environment:
+      - HOST=192.168.4.100
+      #needed for CORS
+      - FRONTEND_HOST=192.168.2.99:3000
+    working_dir: /usr/src
+    volumes: 
+      - ${PWD}:/usr/src
+
+networks:
+  mynetwork:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.4.100/29
+          gateway: 192.168.4.97
